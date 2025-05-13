@@ -94,6 +94,7 @@ export function AccountChart({ transactions }) {
           </SelectContent>
         </Select>
       </CardHeader>
+
       <CardContent>
         <div className="flex justify-around mb-6 text-sm">
           <div className="text-center">
@@ -121,6 +122,7 @@ export function AccountChart({ transactions }) {
             </p>
           </div>
         </div>
+
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
@@ -138,10 +140,10 @@ export function AccountChart({ transactions }) {
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value) => `$${value}`}
+                tickFormatter={(value) => `Rs.${value}`}
               />
               <Tooltip
-                formatter={(value) => [`$${value}`, undefined]}
+                formatter={(value) => [`Rs.${value}`, undefined]}
                 contentStyle={{
                   backgroundColor: "hsl(var(--popover))",
                   border: "1px solid hsl(var(--border))",
