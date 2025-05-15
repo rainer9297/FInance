@@ -101,9 +101,18 @@ export function AddTransactionForm({
       if (scannedData.description) {
         setValue("description", scannedData.description);
       }
+
+      // Category enforcement
       if (scannedData.category) {
-        setValue("category", scannedData.category);
+        const matched = categories.find(
+          (cat) =>
+            cat.name.toLowerCase() === scannedData.category.toLowerCase()
+        );
+        if (matched) {
+          setValue("category", matched.id);
+        }
       }
+
       toast.success("Receipt scanned successfully");
     }
   };
@@ -123,6 +132,9 @@ export function AddTransactionForm({
   const type = watch("type");
   const isRecurring = watch("isRecurring");
   const date = watch("date");
+  const selectedCategory = watch("category");
+  const selectedAccountId = watch("accountId");
+  const selectedRecurringInterval = watch("recurringInterval");
 
   const filteredCategories = categories.filter(
     (category) => category.type === type
@@ -130,15 +142,14 @@ export function AddTransactionForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {/* Receipt Scanner - Only show in create mode */}
       {!editMode && <ReceiptScanner onScanComplete={handleScanComplete} />}
 
       {/* Type */}
       <div className="space-y-2">
         <label className="text-sm font-medium">Type</label>
         <Select
+          value={type}
           onValueChange={(value) => setValue("type", value)}
-          defaultValue={type}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select type" />
@@ -153,7 +164,7 @@ export function AddTransactionForm({
         )}
       </div>
 
-      {/* Amount and Account */}
+      {/* Amount & Account */}
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2">
           <label className="text-sm font-medium">Amount</label>
@@ -171,8 +182,8 @@ export function AddTransactionForm({
         <div className="space-y-2">
           <label className="text-sm font-medium">Account</label>
           <Select
+            value={selectedAccountId}
             onValueChange={(value) => setValue("accountId", value)}
-            defaultValue={getValues("accountId")}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select account" />
@@ -203,8 +214,8 @@ export function AddTransactionForm({
       <div className="space-y-2">
         <label className="text-sm font-medium">Category</label>
         <Select
+          value={selectedCategory}
           onValueChange={(value) => setValue("category", value)}
-          defaultValue={getValues("category")}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select category" />
@@ -283,8 +294,8 @@ export function AddTransactionForm({
         <div className="space-y-2">
           <label className="text-sm font-medium">Recurring Interval</label>
           <Select
+            value={selectedRecurringInterval}
             onValueChange={(value) => setValue("recurringInterval", value)}
-            defaultValue={getValues("recurringInterval")}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select interval" />
